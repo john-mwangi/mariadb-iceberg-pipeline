@@ -7,14 +7,4 @@ USER spark
 RUN curl -Lo /opt/spark/jars/iceberg-spark-runtime-3.5_2.12-1.7.1.jar https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-spark-runtime-3.5_2.12/1.7.1/iceberg-spark-runtime-3.5_2.12-1.7.1.jar && \
     curl -Lo /opt/spark/jars/paimon-spark-3.5-0.9.0.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-spark-3.5/0.9.0/paimon-spark-3.5-0.9.0.jar
 
-CMD ["/opt/spark/bin/spark-sql", \
-    "--jars", "/opt/spark/jars/paimon-spark-3.5-0.9.0.jar", \
-    "--conf", "spark.sql.catalog.paimon_catalog=org.apache.paimon.spark.SparkCatalog", \
-    "--conf", "spark.sql.catalog.paimon_catalog.warehouse=file:///tmp/paimon/warehouse", \
-    "--packages", "org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.7.1", \
-    "--conf", "spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions", "org.apache.paimon.spark.extensions.PaimonSparkSessionExtensions", \
-    "--conf", "spark.sql.catalog.spark_catalog=org.apache.iceberg.spark.SparkSessionCatalog", \
-    "--conf", "spark.sql.catalog.spark_catalog.type=hive", \
-    "--conf", "spark.sql.catalog.iceberg_catalog=org.apache.iceberg.spark.SparkCatalog", \
-    "--conf", "spark.sql.catalog.iceberg_catalog.type=hadoop", \
-    "--conf", "spark.sql.catalog.iceberg_catalog.warehouse=file:///tmp/iceberg/warehouse"]
+CMD ["/opt/spark/bin/spark-sql"]

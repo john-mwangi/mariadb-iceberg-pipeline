@@ -35,6 +35,7 @@ services:
       volumes:
          - shared-tmpfs:/tmp/iceberg
          - shared-tmpfs:/tmp/paimon
+         - ./dockerfiles/config/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
    jobmanager:
       user: flink:flink
       container_name: jobmanager
