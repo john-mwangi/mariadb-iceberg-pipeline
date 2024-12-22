@@ -192,3 +192,4 @@ notebooks
 .DS_Store
 dockerfiles/dependencies
 cache
+logs
