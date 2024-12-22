@@ -193,5 +193,17 @@ SHOW DATABASES IN paimon_catalog;
 SHOW TABLES IN paimon_catalog.users_ta_ice;
 SHOW DATABASES IN iceberg_catalog;
 SHOW TABLES IN iceberg_catalog.`users_ta_ice.db`;
-DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;        -- Works
+DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;        -- Works as expected
 SELECT * FROM iceberg_catalog.`users_ta_ice.db`.user_2;   -- TableNotExistException (bug??)
+
+
+-- *************************************************
+-- **************    SPARK SQL    ******************
+-- *************************************************
+
+-- Run kafka_sync_table
+
+docker compose run spark-sql
+
+DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;
+DESCRIBE paimon_catalog.users_ta_ice.user_2;
