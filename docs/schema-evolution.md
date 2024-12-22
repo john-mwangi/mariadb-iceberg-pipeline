@@ -34,6 +34,7 @@ performed so that a CDC message containing the new schema can be propagated to K
 - [x] Modification of data type - [Official docs](https://paimon.apache.org/docs/0.9/flink/cdc-ingestion/overview/#schema-change-evolution) 
 - [x] Renaming of columns - the original column will have a NULL value
 - [x] Dropping columns - deleted columns will have a NULL value
+- [x] Adding tables - The `kafka_sync_database` job has to be re-run to create the new tables
 
 ## Limitations
 - Paimon Iceberg Compatibility Mode feature seems to have a bug: you can describe 
