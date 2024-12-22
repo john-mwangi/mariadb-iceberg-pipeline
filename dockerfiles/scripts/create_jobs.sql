@@ -155,7 +155,7 @@ flink run \
     --table_conf changelog-producer=input \
     --kafka_conf scan.startup.mode=earliest-offset \
     --table_conf bucket=4 \
-    --table_conf auto-create=true
+    --table_conf auto-create=false
 
   SHOW DATABASES IN paimon_catalog;
   SHOW TABLES IN paimon_catalog.users_da;
