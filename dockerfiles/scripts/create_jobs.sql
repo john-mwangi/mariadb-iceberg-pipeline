@@ -194,7 +194,7 @@ SHOW TABLES IN paimon_catalog.users_ta_ice;
 SHOW DATABASES IN iceberg_catalog;
 SHOW TABLES IN iceberg_catalog.`users_ta_ice.db`;
 DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;        -- Works as expected
-SELECT * FROM iceberg_catalog.`users_ta_ice.db`.user_2;   -- TableNotExistException (bug??)
+SELECT * FROM iceberg_catalog.`users_ta_ice.db`.user_2;   -- TableNotExistException bug. To be fixed in Paimon v1.0
 
 
 -- *************************************************
