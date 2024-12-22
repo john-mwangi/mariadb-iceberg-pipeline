@@ -161,3 +161,49 @@ flink run \
   SHOW TABLES IN paimon_catalog.users_da;
   SELECT * FROM paimon_catalog.users_da.user_1;
   SELECT * FROM paimon_catalog.users_da.user_2;
+
+-- *************************************************
+-- ******    PAIMON ICEBERG COMPATIBILITY   ********
+-- *************************************************
+
+-- Create Paimon Catalog
+
+flink run \
+    /opt/flink/lib/paimon-flink-action-0.9.0.jar \
+    kafka_sync_table \
+    --warehouse file:///tmp/paimon/warehouse \
+    --database users_ta_ice \
+    --table user_2 \
+    --primary_keys id \
+    --kafka_conf properties.bootstrap.servers=kafka:9092 \
+    --kafka_conf topic=users.db_1.user_2 \
+    --kafka_conf value.format=debezium-json \
+    --table_conf changelog-producer=input \
+    --kafka_conf scan.startup.mode=earliest-offset \
+    --table_conf metadata.iceberg-compatible=true
+
+CREATE CATALOG iceberg_catalog WITH (
+    'type' = 'iceberg',
+    'catalog-type' = 'hadoop',
+    'warehouse' = 'file:///tmp/paimon/warehouse',
+    'cache-enabled' = 'false' -- disable iceberg catalog caching to quickly see the result
+);
+
+SHOW DATABASES IN paimon_catalog;
+SHOW TABLES IN paimon_catalog.users_ta_ice;
+SHOW DATABASES IN iceberg_catalog;
+SHOW TABLES IN iceberg_catalog.`users_ta_ice.db`;
+DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;        -- Works as expected
+SELECT * FROM iceberg_catalog.`users_ta_ice.db`.user_2;   -- TableNotExistException bug. To be fixed in Paimon v1.0
+
+
+-- *************************************************
+-- **************    SPARK SQL    ******************
+-- *************************************************
+
+-- Run kafka_sync_table
+
+docker compose run spark-sql
+
+DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;
+DESCRIBE paimon_catalog.users_ta_ice.user_2;
