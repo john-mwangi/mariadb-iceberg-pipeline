@@ -1,10 +1,12 @@
--- *************************************************
--- **************    FLINK SQL    ******************
--- *************************************************
+## FLINK SQL
+Set the execution checkpoint, if not set. This implementation already sets this
+in docker compose file.
+```sql
+SET execution.checkpointing.interval = '3s';
+```
 
--- SET execution.checkpointing.interval = '3s'; --set on docker-compose
-
--- Create sources from DB
+Create sources from the DB.
+```sql
 CREATE TABLE user_source (
     database_name STRING METADATA VIRTUAL,
     table_name STRING METADATA VIRTUAL,
@@ -23,8 +25,10 @@ CREATE TABLE user_source (
     'database-name' = 'db_[0-9]+',
     'table-name' = 'user_[0-9]+'
   );
+```
 
--- Create a sink in the DW
+Create a sink.
+```sql
 CREATE TABLE all_users_sink (
     database_name STRING,
     table_name    STRING,
@@ -41,21 +45,24 @@ CREATE TABLE all_users_sink (
     'warehouse'='file:///tmp/iceberg/warehouse',
     'format-version'='2'
   );
+```
 
--- Start a streaming job
+Start a streaming job.
+```sql
 INSERT INTO all_users_sink select * from user_source;
+```
 
--- Monitor the data warehouse
+Monitor the data lake.
+```sql
 SELECT * FROM all_users_sink; 
+```
 
+## KAFKA SINK
+Ensure that the execution checkpoint has been set. This is already done in the
+docker compose file for this implementation.
 
--- *************************************************
--- **************    KAFKA SINK    *****************
--- *************************************************
-
--- Set checkpoint interval
-
--- Create sources from Kafka
+Create sources from Kafka.
+```sql
 CREATE TABLE user_source_kafka (
     database_name STRING METADATA FROM 'value.source.database' VIRTUAL,
     table_name STRING METADATA FROM 'value.source.table' VIRTUAL,
@@ -75,8 +82,10 @@ CREATE TABLE user_source_kafka (
     'format' = 'debezium-json',
     'debezium-json.schema-include' = 'true'
   );
+```
 
--- Create a Kafka sink in Iceberg
+Create a Kafka sink in Iceberg.
+```sql
 CREATE TABLE all_users_sink_kafka (
   database_name STRING,
   table_name    STRING,
@@ -94,27 +103,34 @@ CREATE TABLE all_users_sink_kafka (
     'warehouse'='file:///tmp/iceberg/warehouse',
     'format-version'='2'
   );
+```
 
--- Start a streaming job
+Start a streaming job.
+```sql
 INSERT INTO all_users_sink_kafka SELECT * FROM user_source_kafka;
+```
 
--- Monitor the table in the dw
+Monitor the table in the data lake.
+```sql
 SELECT * FROM all_users_sink_kafka;
+```
+## PAIMON KAFKA TABLE SYNC ACTION
 
--- *************************************************
--- *****    PAIMON KAFKA TABLE SYNC ACTION    ******
--- *************************************************
-
-
+Create a Paimon catalog using Flink SQL.
+```sql
 CREATE CATALOG paimon_catalog WITH (
     'type' = 'paimon',
     'warehouse' = 'file:///tmp/paimon/warehouse'
 );
+```
 
-
+Log into the jobmanager container.
+```bash
 docker exec -ti jobmanager bash
+```
 
-# Synchronisation of one Paimon table to one Kafka topic.
+Synchronisation of one Paimon table to one Kafka topic.
+```bash
 flink run \
     /opt/flink/lib/paimon-flink-action-0.9.0.jar \
     kafka_sync_table \
@@ -127,22 +143,20 @@ flink run \
     --kafka_conf value.format=debezium-json \
     --table_conf changelog-producer=input \
     --kafka_conf scan.startup.mode=earliest-offset
+```
 
+Select from the newly synced table.
+```sql
 SELECT * FROM paimon_catalog.users_ta.user_2;
+```
 
--- *************************************************
--- ******    PAIMON KAFKA DB SYNC ACTION    ********
--- *************************************************
+## PAIMON KAFKA DB SYNC ACTION
+Create paimon_catalog as described above.
 
--- Create paimon_catalog
+Log in to the jobmanager container as described above.
 
-docker exec -ti jobmanager bash
-
-# Synchronization from multiple Kafka topics to a Paimon database.
-# This action will create one database (users_da) with 2 tables:
-# - user_1 (merging all tables called user_1)
-# - user_2 (merging all tables called user_2)
-
+Synchronization from multiple Kafka topics to a Paimon database.
+```bash
 flink run \
     /opt/flink/lib/paimon-flink-action-0.9.0.jar \
     kafka_sync_database \
@@ -156,18 +170,27 @@ flink run \
     --kafka_conf scan.startup.mode=earliest-offset \
     --table_conf bucket=4 \
     --table_conf auto-create=false
+```
 
-  SHOW DATABASES IN paimon_catalog;
-  SHOW TABLES IN paimon_catalog.users_da;
-  SELECT * FROM paimon_catalog.users_da.user_1;
-  SELECT * FROM paimon_catalog.users_da.user_2;
+This action will create one database (users_da) with 2 tables:
+- user_1 (merging all tables called user_1)
+- user_2 (merging all tables called user_2)
 
--- *************************************************
--- ******    PAIMON ICEBERG COMPATIBILITY   ********
--- *************************************************
+Investigate synced tables in Paimon.
+```sql
+SHOW DATABASES IN paimon_catalog;
+SHOW TABLES IN paimon_catalog.users_da;
+SELECT * FROM paimon_catalog.users_da.user_1;
+SELECT * FROM paimon_catalog.users_da.user_2;
+```
 
--- Create Paimon Catalog
+## PAIMON ICEBERG COMPATIBILITY
+Create paimon_catalog as described above.
 
+Log into the jobmanager container.
+
+Create a kafka_sync_table job.
+```bash
 flink run \
     /opt/flink/lib/paimon-flink-action-0.9.0.jar \
     kafka_sync_table \
@@ -181,29 +204,39 @@ flink run \
     --table_conf changelog-producer=input \
     --kafka_conf scan.startup.mode=earliest-offset \
     --table_conf metadata.iceberg-compatible=true
+```
 
+Create an Iceberg catalog.
+```sql
 CREATE CATALOG iceberg_catalog WITH (
     'type' = 'iceberg',
     'catalog-type' = 'hadoop',
     'warehouse' = 'file:///tmp/paimon/warehouse',
     'cache-enabled' = 'false' -- disable iceberg catalog caching to quickly see the result
 );
+```
 
+Investigate the synced table for compatibility.
+```sql
 SHOW DATABASES IN paimon_catalog;
 SHOW TABLES IN paimon_catalog.users_ta_ice;
 SHOW DATABASES IN iceberg_catalog;
 SHOW TABLES IN iceberg_catalog.`users_ta_ice.db`;
 DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;        -- Works as expected
 SELECT * FROM iceberg_catalog.`users_ta_ice.db`.user_2;   -- TableNotExistException bug. To be fixed in Paimon v1.0
+```
 
+## SPARK SQL
 
--- *************************************************
--- **************    SPARK SQL    ******************
--- *************************************************
+Run kafka_sync_table.
 
--- Run kafka_sync_table
-
+Access Spark SQL.
+```bash
 docker compose run spark-sql
+```
 
+Query some tables in using Spark.
+```sql
 DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;
 DESCRIBE paimon_catalog.users_ta_ice.user_2;
+```
