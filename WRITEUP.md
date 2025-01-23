@@ -11,9 +11,17 @@ the following capabilities:
 ## Solution Design
 (mermaid diagram)
 
-## Outcomes
-(monitoring, UI, checklist, answers to qs, capabilities, features, etc)
+**Component** | **Use / Rationale**
+--- | ---
+MariaDB | MediaWiki database is on MariaDB
+Debezium CDC | Flink CDC does not capture the "schema" field which is required for schema evolution support
+Kafka | Message broker
+Flink SQL | Default interface for creating streaming jobs and querying tables
+Spark SQL | Alternative Spark interface for querying tables
+Kafka UI | Dashboard for viewing Kafka messages or manually creating them
+Flink UI | Dashboard for monitoring streaming jobs
 
+## Outcomes & Observations
 With reference to the detailed tasks outlined in the *Implementation Process* 
 section of the README, all the capabilities were implemented except for the Paimon
 Iceberg Compatibility which has been partially implemented in Paimon v0.9 but
@@ -23,10 +31,15 @@ Once initiated, the streaming jobs can be monitored in the Flink UI dashboard
 while the Kafka messages can be monitored on the Kafka UI dashboard. The tables
 can be queried using either Spark or Flink SQL.
 
-## FAQs
-1. Why Debezium CDC over Flink CDC?
+Schema evolution between source and destination tables is automatically handled 
+by the Paimon Kafka sync jobs between MariaDB and Paimon data lake. This includes: adding/removal of tables, adding/removal of columns, renaming of columns, type 
+changes (except type widening). As mentioned above, it is currently not possible 
+to access Paimon tables from Iceberg as the Iceberg Compatability Mode is WIP.
+See `./docs/schema-evolution.md` for further details.
 
-## Outcomes
-Notes & observations (missing features)
-Answers to questions
-Implementation
+## Conclusions
+* The pipeline is able to support incremental updates from MediaWiki.
+* Whereas schema evolution is working, it should not be implemented until the 
+Iceberg Compatibility Mode is fully functional.
+* Iceberg Compatibilty Mode should be retested when Paimon v1.0 is released 
+(ongoing).
