@@ -2,11 +2,14 @@
 The over-arching goal of the assignment was to determine if the possiblility of
 having incremental updates of MediaWiki data in the data lake, using Change Data Capture (CDC). To accomplish this, we conducted an experiment to investigate 
 the following capabilities:
-1. Initiating a streaming job directly from a MariaDB database to an Iceberg data lake.
-1. Using Kafka as a sink and establishing a streaming job from Kafka to Iceberg.
-1. Implement automated schema evolution between MariDB and Paimon data lake in a streaming job.
-1. Implement compatibility between Paimon and Iceberg data lakes.
-1. Querying the data lakes using Spark SQL and Flink SQL.
+
+**Capability** | **Works?**
+--- | ---
+Initiating a streaming job directly from a MariaDB database to an Iceberg data lake | Yes
+Using Kafka as a sink and establishing a streaming job from Kafka to Iceberg | Yes
+Implement automated schema evolution between MariDB and Paimon data lake in a streaming job | Yes
+Implement compatibility between Paimon and Iceberg data lakes | No
+Querying Paimon & Iceberg data lakes using Spark SQL and Flink SQL | Yes
 
 ## Solution Design
 (mermaid diagram)
