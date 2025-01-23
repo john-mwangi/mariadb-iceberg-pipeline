@@ -22,7 +22,7 @@ Refer to `./docs`
 
 ### 3. Monitor streaming jobs
 - Flink UI: http://localhost:8081/
-- Kafka UI: http://localhost:8082/
+- Kafka UI: http://localhost:8082/ (u: admin, p:admin)
 
 ## Implementation process
 Below is the implementation procedure that will be followed, to be updated as necessary:

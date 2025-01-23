@@ -1,4 +1,9 @@
 ## FLINK SQL
+Log into Flink SQL terminal.
+```shell
+docker compose run sql-client
+```
+
 Set the execution checkpoint, if not set. This implementation already sets this
 in docker compose file.
 ```sql
@@ -58,6 +63,8 @@ SELECT * FROM all_users_sink;
 ```
 
 ## KAFKA SINK
+Log into the Flink SQL terminal as described above.
+
 Ensure that the execution checkpoint has been set. This is already done in the
 docker compose file for this implementation.
 
@@ -114,7 +121,9 @@ Monitor the table in the data lake.
 ```sql
 SELECT * FROM all_users_sink_kafka;
 ```
+
 ## PAIMON KAFKA TABLE SYNC ACTION
+Log into the Flink SQL terminal.
 
 Create a Paimon catalog using Flink SQL.
 ```sql
