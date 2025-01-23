@@ -5,6 +5,6 @@ RUN mkdir -p /home/spark/.ivy2/cache && chown -R spark:spark /home/spark
 
 USER spark
 RUN curl -Lo /opt/spark/jars/iceberg-spark-runtime-3.5_2.12-1.7.1.jar https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-spark-runtime-3.5_2.12/1.7.1/iceberg-spark-runtime-3.5_2.12-1.7.1.jar && \
-    curl -Lo /opt/spark/jars/paimon-spark-3.5-0.9.0.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-spark-3.5/0.9.0/paimon-spark-3.5-0.9.0.jar
+    curl -Lo /opt/spark/jars/paimon-spark-3.5-1.0.0.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-spark-3.5/1.0.0/paimon-spark-3.5-1.0.0.jar
 
 CMD ["/opt/spark/bin/spark-sql"]

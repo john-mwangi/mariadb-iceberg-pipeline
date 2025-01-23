@@ -141,7 +141,7 @@ docker exec -ti jobmanager bash
 Synchronisation of one Paimon table to one Kafka topic.
 ```bash
 flink run \
-    /opt/flink/lib/paimon-flink-action-0.9.0.jar \
+    /opt/flink/lib/paimon-flink-action-1.0.0.jar \
     kafka_sync_table \
     --warehouse file:///tmp/paimon/warehouse \
     --database users_ta \
@@ -167,7 +167,7 @@ Log in to the jobmanager container as described above.
 Synchronization from multiple Kafka topics to a Paimon database.
 ```bash
 flink run \
-    /opt/flink/lib/paimon-flink-action-0.9.0.jar \
+    /opt/flink/lib/paimon-flink-action-1.0.0.jar \
     kafka_sync_database \
     --warehouse file:///tmp/paimon/warehouse \
     --database users_da \
@@ -196,12 +196,22 @@ SELECT * FROM paimon_catalog.users_da.user_2;
 ## PAIMON ICEBERG COMPATIBILITY
 Create paimon_catalog as described above.
 
+Create an Iceberg catalog.
+```sql
+CREATE CATALOG iceberg_catalog WITH (
+    'type' = 'iceberg',
+    'catalog-type' = 'hadoop',
+    'warehouse' = 'file:///tmp/paimon/warehouse/iceberg',
+    'cache-enabled' = 'false' -- disable iceberg catalog caching to quickly see the result
+);
+```
+
 Log into the jobmanager container.
 
 Create a kafka_sync_table job.
 ```bash
 flink run \
-    /opt/flink/lib/paimon-flink-action-0.9.0.jar \
+    /opt/flink/lib/paimon-flink-action-1.0.0.jar \
     kafka_sync_table \
     --warehouse file:///tmp/paimon/warehouse \
     --database users_ta_ice \
@@ -212,17 +222,7 @@ flink run \
     --kafka_conf value.format=debezium-json \
     --table_conf changelog-producer=input \
     --kafka_conf scan.startup.mode=earliest-offset \
-    --table_conf metadata.iceberg-compatible=true
-```
-
-Create an Iceberg catalog.
-```sql
-CREATE CATALOG iceberg_catalog WITH (
-    'type' = 'iceberg',
-    'catalog-type' = 'hadoop',
-    'warehouse' = 'file:///tmp/paimon/warehouse',
-    'cache-enabled' = 'false' -- disable iceberg catalog caching to quickly see the result
-);
+    --table_conf metadata.iceberg.storage=hadoop-catalog
 ```
 
 Investigate the synced table for compatibility.
@@ -230,9 +230,9 @@ Investigate the synced table for compatibility.
 SHOW DATABASES IN paimon_catalog;
 SHOW TABLES IN paimon_catalog.users_ta_ice;
 SHOW DATABASES IN iceberg_catalog;
-SHOW TABLES IN iceberg_catalog.`users_ta_ice.db`;
-DESCRIBE iceberg_catalog.`users_ta_ice.db`.user_2;        -- Works as expected
-SELECT * FROM iceberg_catalog.`users_ta_ice.db`.user_2;   -- TableNotExistException bug. To be fixed in Paimon v1.0
+SHOW TABLES IN iceberg_catalog.users_ta_ice;
+DESCRIBE iceberg_catalog.users_ta_ice.user_2;
+SELECT * FROM iceberg_catalog.users_ta_ice.user_2;
 ```
 
 ## SPARK SQL
