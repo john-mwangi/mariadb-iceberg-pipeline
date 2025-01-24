@@ -43,8 +43,18 @@ possible to access Paimon tables from Iceberg via the Iceberg Compatability
 Mode. See `./docs/schema-evolution.md` for further details.
 
 ## Conclusions
-* The pipeline is able to support incremental updates from MediaWiki.
-* Because schema evolution is currently only supported in Paimon, while
-being accessible from Iceberg, the cost implications of supporting 2 data lakes
-consurrently should be carefully considered. According to the current Iceberg 
-product roadmap, this functionality is planned for XXX.
+1. The pipeline is able to support incremental updates from MediaWiki.
+1. The ability to quickly sync tables from a source database to Paimon is useful
+when migrating numerous databases, such as what Wikipedia has. Because this 
+feature is only currently available in Paimon, the cost implications of 
+supporting 2 data lakes consurrently should be carefully considered.
+1. According to official documentation, schema evolution is also supported in 
+Iceberg. This however was not investigated as part of the implementation. If this
+feature is to be considered meaningful, Iceberg would also need capability to
+to create tables without a hardcoded schema definition.
+
+## Next Steps
+Investigate Iceberg has workaround to the advantages that Paimon has over it,
+as per our current understanding:
+1. Possibility of creating Iceberg tables without an explicitly defined schema.
+1. Schema evolution on such tables.
