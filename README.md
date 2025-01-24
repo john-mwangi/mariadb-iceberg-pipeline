@@ -62,14 +62,13 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Implement schema evolution support (Paimon Kafka Sync Action)
     - [x] Test schema evolution
     - [x] Implement Iceberg compatibility
-    - [x] Test Iceberg compatibility <sup>[2]</sup>
+    - [x] Test Iceberg compatibility
 - [x] Spark SQL
     - [x] Add Spark SQL
     - [x] Query Iceberg catalog table using Spark SQL
 
 > [!NOTE]
 > 1. Current Flink CDC version doesn't capture the schema. This is planned for [Flink CDC v3.3](https://issues.apache.org/jira/browse/FLINK-36611)
-> 1. This feature is partially implemented in Paimon v0.9. Full implementation is planned for Paimon v1.0.
 
 ## Relevant links
 * https://phabricator.wikimedia.org/T370354
