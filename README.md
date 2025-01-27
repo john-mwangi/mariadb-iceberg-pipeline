@@ -17,6 +17,10 @@ in the correct directories.
 ```
 docker compose -f docker-compose.yml up --build --remove-orphans -d
 ```
+
+>[!TIP]
+> Use `dockerfiles/versions.env` to upgrade components of the pipeline.
+
 ### 2. Create a streaming job
 Refer to `./docs`
 
