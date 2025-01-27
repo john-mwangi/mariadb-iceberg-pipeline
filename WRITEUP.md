@@ -3,7 +3,7 @@ The over-arching goal of the assignment was to determine if the possiblility of
 having incremental updates of MediaWiki data in the data lake, using Change Data Capture (CDC). To accomplish this, we conducted an experiment to investigate 
 the following capabilities:
 
-**Capability** | **Works?**
+**Capability** | **Supported**
 --- | ---
 Initiating a streaming job directly from a MariaDB database to an Iceberg data lake | Yes
 Using Kafka as a sink and establishing a streaming job from Kafka to Iceberg | Yes
