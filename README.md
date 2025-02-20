@@ -70,9 +70,16 @@ Below is the implementation procedure that will be followed, to be updated as ne
 - [x] Spark SQL
     - [x] Add Spark SQL
     - [x] Query Iceberg catalog table using Spark SQL
+- Connect replicas
+    - [ ] Connect to Analytics/Wiki Replicas<sup>[2]</sup>
+    - [x] Install MediaWiki locally [http://localhost:8080/wiki/Main_Page]
+    - [ ] Connect to MediWiki db
+    - [ ] Simulate pipeline in prod-like environment
 
 > [!NOTE]
-> 1. Current Flink CDC version doesn't capture the schema. This is planned for [Flink CDC v3.3](https://issues.apache.org/jira/browse/FLINK-36611)
+> 1. Current Flink CDC version doesn't capture the schema. This is planned for 
+[Flink CDC v3.3](https://issues.apache.org/jira/browse/FLINK-36611)
+> 2. Analytics Replicas contain unredacted personal user data. Wiki Replicas do not have binlog settings enabled
 
 ## Relevant links
 * https://phabricator.wikimedia.org/T370354
