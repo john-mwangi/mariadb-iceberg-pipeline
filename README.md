@@ -71,10 +71,12 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Add Spark SQL
     - [x] Query Iceberg catalog table using Spark SQL
     - [x] Query Paimon catalog table using Spark SQL
-- [ ] Connect replicas
+- [ ] CDC experimentation
     - [ ] Connect to Analytics/Wiki Replicas<sup>[2]</sup>
-    - [x] Install MediaWiki locally [http://localhost:8080/wiki/Main_Page]
-    - [ ] Connect to MediWiki db
+    - [x] Install MediaWiki locally => http://localhost:8083/wiki/Main_Page
+    - [x] Connect to MediWiki db
+    - [x] Replace mariadb:11 image with bitnami/mariadb:11.4
+    - [ ] Update docker-compose.override.yml
     - [ ] Simulate pipeline in prod-like environment
 
 > [!NOTE]
