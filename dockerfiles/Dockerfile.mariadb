@@ -4,15 +4,6 @@ COPY versions.env /opt/flink/
 
 USER root
 
-# Fix error Can't connect to local server through socket '/opt/bitnami/mariadb/tmp/mysql.sock'
-RUN mkdir -p /opt/bitnami/mariadb/tmp && \
-    chown -R 1001:1001 /opt/bitnami/mariadb/tmp && \
-    chmod -R 775 /opt/bitnami/mariadb/tmp
-
-RUN mkdir -p /var/log/mysql && \
-    chown -R 1001:1001 /var/log/mysql && \
-    chmod -R 775 /var/log/mysql
-
 RUN apt-get update && \
     apt-get install -y curl && \
     mkdir -p /opt/flink/lib && \
@@ -27,10 +18,11 @@ RUN apt-get update && \
     curl -Lo /opt/flink/lib/paimon-flink-cdc-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-flink-cdc/${PAIMON_VERSION}/paimon-flink-cdc-${PAIMON_VERSION}.jar && \
     curl -Lo /opt/flink/lib/flink-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-mysql-cdc/${FLINK_CDC_VERSION}/flink-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar
 
-RUN chown nobody:nogroup /opt/flink/ && \
+RUN chown 1001:root /opt/flink/ && \
     chmod 775 /opt/flink/
 
 # Scripts placed here will automatically run when the container starts
 COPY scripts/create_tables.sql /docker-entrypoint-initdb.d/
 
+# Default container user
 USER 1001
