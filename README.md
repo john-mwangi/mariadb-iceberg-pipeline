@@ -15,7 +15,7 @@ Determine the feasibility of:
 Running this docker-compose file will download the necessary connectors and place them
 in the correct directories.
 ```
-docker compose -f docker-compose.yml up --build --remove-orphans -d
+docker compose -f docker-compose-demo.yml up --build --remove-orphans -d
 ```
 
 >[!TIP]
