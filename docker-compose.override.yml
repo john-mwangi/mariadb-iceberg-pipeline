@@ -1,0 +1,36 @@
+services:
+  mariadb-main:
+    container_name: mariadb-main
+    build:
+      context: dockerfiles
+      dockerfile: Dockerfile.mariadb
+    volumes:
+      - mariadbdata:/bitnami/mariadb
+      - ./dockerfiles/config/my.cnf:/opt/bitnami/mariadb/conf/my.cnf
+    environment:
+      - MARIADB_REPLICATION_MODE=master
+      - MARIADB_REPLICATION_USER=repl_user
+      - MARIADB_REPLICATION_PASSWORD=repl_password
+      - MARIADB_ROOT_PASSWORD=main_root_password
+      - MARIADB_USER=my_user
+      - MARIADB_PASSWORD=my_password
+      - MARIADB_DATABASE=my_database
+  mariadb-replica:
+    container_name: mariadb-replica
+    build:
+      context: dockerfiles
+      dockerfile: Dockerfile.mariadb
+    depends_on:
+      - mariadb-main
+    environment:
+      - MARIADB_REPLICATION_MODE=slave
+      - MARIADB_REPLICATION_USER=repl_user
+      - MARIADB_REPLICATION_PASSWORD=repl_password
+      - MARIADB_MASTER_HOST=mariadb-main
+      - MARIADB_MASTER_PORT_NUMBER=3306
+      - MARIADB_MASTER_ROOT_PASSWORD=main_root_password
+    volumes:
+      - ./dockerfiles/config/my.cnf:/opt/bitnami/mariadb/conf/my.cnf
+volumes:
+  mariadbdata:
+    driver: local
