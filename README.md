@@ -27,6 +27,7 @@ Refer to `./docs`
 ### 3. Monitor streaming jobs
 - Flink UI: http://localhost:8081/
 - Kafka UI: http://localhost:8082/ (u: admin, p:admin)
+- MediaWiki UI : http://localhost:8083/wiki/Main_Page
 
 ## Implementation process
 Below is the implementation procedure that will be followed, to be updated as necessary:
@@ -73,7 +74,7 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Query Paimon catalog table using Spark SQL
 - [ ] CDC experimentation
     - [ ] Connect to Analytics/Wiki Replicas<sup>[2]</sup>
-    - [x] Install MediaWiki locally => http://localhost:8083/wiki/Main_Page
+    - [x] Install MediaWiki locally
     - [x] Connect to MediWiki db
     - [x] Replace mariadb:11 image with bitnami/mariadb:11.4
     - [ ] Update docker-compose.override.yml
