@@ -81,11 +81,13 @@ services:
          context: dockerfiles
          dockerfile: Dockerfile.mariadb
       environment:
-         - MYSQL_ROOT_PASSWORD=mypass
+         - MARIADB_ROOT_PASSWORD=mypass
       ports:
          - 3306:3306
       networks:
          - iceberg_net
+      volumes:
+         - ./dockerfiles/config/my.cnf:/opt/bitnami/mariadb/conf/my.cnf
    kafka:
       image: confluentinc/cp-kafka:7.7.1
       container_name: kafka
