@@ -1,142 +1,53 @@
+# Please see DEVELOPERS.md for help
+#
+# Contributions to this file are welcome, but please note that this file is
+# minimal by design, with the idea to make it easily extensible via
+# docker-compose.override.yml. For help with doing that, please see
+# DEVELOPERS.md
 services:
-   sql-client:
-      user: flink:flink
-      container_name: sql-client
-      build:
-         context: dockerfiles
-         dockerfile: Dockerfile.sqlclient
-      networks:
-         - iceberg_net
-      depends_on:
-         - jobmanager
-         - mariadb
-      environment:
-         - MYSQL_HOST=mariadb
-         - |
-           FLINK_PROPERTIES=
-           jobmanager.rpc.address: jobmanager
-           rest.address: jobmanager
-           execution.checkpointing.interval: 3000
-      volumes:
-         - shared-tmpfs:/tmp/iceberg
-         - shared-tmpfs:/tmp/paimon
-   spark-sql:
-      build:
-         context: dockerfiles
-         dockerfile: Dockerfile.sparksql
-      container_name: spark-sql
-      ports:
-         - 4040:4040
-      depends_on:
-         - jobmanager
-         - mariadb
-      networks:
-         - iceberg_net
-      volumes:
-         - shared-tmpfs:/tmp/iceberg
-         - shared-tmpfs:/tmp/paimon
-         - ./dockerfiles/config/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
-   jobmanager:
-      user: flink:flink
-      container_name: jobmanager
-      build:
-         context: dockerfiles
-         dockerfile: Dockerfile.main
-      ports:
-         - "8081:8081"
-      command: jobmanager
-      environment:
-         - |
-           FLINK_PROPERTIES=
-           jobmanager.rpc.address: jobmanager
-           execution.checkpointing.interval: 3000
-      volumes:
-         - shared-tmpfs:/tmp/iceberg
-         - shared-tmpfs:/tmp/paimon
-      networks:
-         - iceberg_net
-   taskmanager:
-      user: flink:flink
-      container_name: taskmanager
-      build:
-         context: dockerfiles
-         dockerfile: Dockerfile.main
-      depends_on:
-         - jobmanager
-      command: taskmanager
-      environment:
-         - |
-           FLINK_PROPERTIES=
-           jobmanager.rpc.address: jobmanager
-           taskmanager.numberOfTaskSlots: 10
-           execution.checkpointing.interval: 3000
-      volumes:
-         - shared-tmpfs:/tmp/iceberg
-         - shared-tmpfs:/tmp/paimon
-      networks:
-         - iceberg_net
-   mariadb:
-      container_name: mariadb
-      build:
-         context: dockerfiles
-         dockerfile: Dockerfile.mariadb
-      environment:
-         - MARIADB_ROOT_PASSWORD=mypass
-      ports:
-         - 3306:3306
-      networks:
-         - iceberg_net
-      volumes:
-         - ./dockerfiles/config/my.cnf:/opt/bitnami/mariadb/conf/my.cnf
-   kafka:
-      image: confluentinc/cp-kafka:7.7.1
-      container_name: kafka
-      depends_on:
-         - zookeeper
-      networks:
-         - iceberg_net
-      environment:
-         KAFKA_BROKER_ID: 1
-         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-         KAFKA_LISTENERS: PLAINTEXT://kafka:9092
-         KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-   zookeeper:
-      image: confluentinc/cp-zookeeper:7.7.1
-      container_name: zookeeper
-      environment:
-         ZOOKEEPER_CLIENT_PORT: 2181
-         ZOOKEEPER_TICK_TIME: 2000
-      networks:
-         - iceberg_net
-   debezium:
-      image: debezium/server:3.0.0.Final
-      container_name: debezium
-      ports:
-         - 8080:8080
-      networks:
-         - iceberg_net
-      volumes:
-         - ./dockerfiles/config/application.properties:/debezium/config/application.properties
-   kafka-ui:
-      container_name: kafka-ui
-      image: provectuslabs/kafka-ui:v0.7.2
-      volumes:
-         - ./dockerfiles/config/kafka-ui.yaml:/etc/kafkaui/dynamic_config.yaml
-      environment:
-         DYNAMIC_CONFIG_ENABLED: 'true'
-      depends_on:
-         - kafka
-      networks:
-         - iceberg_net
-      ports:
-         - '8082:8080'
-volumes:
-   shared-tmpfs:
-      driver: local
-      driver_opts:
-         type: "tmpfs"
-         device: "tmpfs"
-networks:
-   iceberg_net:
-      driver: bridge
+  mediawiki:
+    image: docker-registry.wikimedia.org/dev/bookworm-php83-fpm:1.0.0
+    user: "${MW_DOCKER_UID}:${MW_DOCKER_GID}"
+    volumes:
+      - ./:/var/www/html/w:cached
+    env_file:
+      - '.env'
+    environment:
+      COMPOSER_CACHE_DIR: '/var/www/html/w/cache/composer'
+      MW_SERVER: 'http://localhost:${MW_DOCKER_PORT:-8080}'
+      MW_DOCKER_PORT: "${MW_DOCKER_PORT:-8080}"
+      MW_SCRIPT_PATH: '/w'
+      MW_DBPATH: '/var/www/html/w/cache/sqlite'
+      MW_DBTYPE: 'sqlite'
+      MW_LANG: 'en'
+      MW_USER: '${MEDIAWIKI_USER:-Admin}'
+      MW_PASS: '${MEDIAWIKI_PASSWORD:-dockerpass}'
+      MW_SITENAME: 'MediaWiki'
+      MW_LOG_DIR: /var/www/html/w/cache
+      XDEBUG_CONFIG: '${XDEBUG_CONFIG}'
+      XDEBUG_ENABLE: '${XDEBUG_ENABLE:-true}'
+      XHPROF_ENABLE: '${XHPROF_ENABLE:-true}'
+
+  mediawiki-web:
+    image: docker-registry.wikimedia.org/dev/bookworm-apache2:1.0.1
+    user: "${MW_DOCKER_UID}:${MW_DOCKER_GID}"
+    ports:
+      - "${MW_DOCKER_PORT:-8080}:8080"
+    volumes:
+      - ./:/var/www/html/w:cached
+    env_file:
+      - '.env'
+    environment:
+      MW_LOG_DIR: /var/www/html/w/cache
+      MW_DOCKER_PORT: "${MW_DOCKER_PORT:-8080}"
+
+  mediawiki-jobrunner:
+    image: docker-registry.wikimedia.org/dev/bookworm-php83-jobrunner:1.0.0
+    user: "${MW_DOCKER_UID}:${MW_DOCKER_GID}"
+    volumes:
+      - ./:/var/www/html/w:cached
+    env_file:
+      - '.env'
+    environment:
+      MW_LOG_DIR: /var/www/html/w/cache
+      MW_INSTALL_PATH: /var/www/html/w
