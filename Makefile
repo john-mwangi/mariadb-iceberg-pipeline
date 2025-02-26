@@ -8,32 +8,32 @@ UPDATE_CMD = php maintenance/run.php install --dbname=my_database --dbuser=my_us
 
 SETTINGS = \$$wgDBname = 'my_database';\n\
 \$$dockerMainDb = [\n\
-	'host' => "mariadb-main",\n\
-	'dbname' => 'my_database',\n\
-	'user' => 'root',\n\
-	'password' => 'main_root_password',\n\
-	'type' => "mysql",\n\
-	'flags' => DBO_DEFAULT,\n\
-	'load' => 0,\n\
+	\t'host' => 'mariadb-main',\n\
+	\t'dbname' => 'my_database',\n\
+	\t'user' => 'root',\n\
+	\t'password' => 'main_root_password',\n\
+	\t'type' => 'mysql',\n\
+	\t'flags' => DBO_DEFAULT,\n\
+	\t'load' => 0,\n\
 ];\n\
 \$$dockerReplicaDb = [\n\
-	'host' => "mariadb-replica",\n\
-	'dbname' => 'my_database',\n\
-	'user' => 'root',\n\
-	'password' => 'main_root_password',\n\
-	'type' => "mysql",\n\
-	'flags' => DBO_DEFAULT,\n\
-	'max lag' => 60,\n\
-	'load' => 1,\n\
+	\t'host' => 'mariadb-replica',\n\
+	\t'dbname' => 'my_database',\n\
+	\t'user' => 'root',\n\
+	\t'password' => 'main_root_password',\n\
+	\t'type' => 'mysql',\n\
+	\t'flags' => DBO_DEFAULT,\n\
+	\t'max lag' => 60,\n\
+	\t'load' => 1,\n\
 ];\n\
 // Integration tests fail when run with replication, due to not having the temporary tables.\n\
 if ( !defined( 'MW_PHPUNIT_TEST' ) ) {\n\
-	\$$wgDBservers = [ $dockerMainDb, $dockerReplicaDb ];\n\
+	\t\$$wgDBservers = [ \$$dockerMainDb, \$$dockerReplicaDb ];\n\
 } else {\n\
-	\$$wgDBserver = $dockerMainDb['host'];\n\
-	\$$wgDBuser = $dockerMainDb['user'];\n\
-	\$$wgDBpassword = $dockerMainDb['password'];\n\
-	\$$wgDBtype = $dockerMainDb['type']\n\
+	\t\$$wgDBserver = \$$dockerMainDb['host'];\n\
+	\t\$$wgDBuser = \$$dockerMainDb['user'];\n\
+	\t\$$wgDBpassword = \$$dockerMainDb['password'];\n\
+	\t\$$wgDBtype = \$$dockerMainDb['type'];\n\
 }
 
 docker_services: docker-compose.yml
