@@ -1,4 +1,5 @@
 # This Makefile rebuilds MediaWiki
+
 all: docker_services update_mediawiki
 
 UPDATE_CMD = php maintenance/run.php install --dbname=my_database --dbuser=my_user --dbpass=my_password --dbserver=mariadb-main \
@@ -44,10 +45,9 @@ docker_services: docker-compose.yml
 update_mediawiki: .env
 	docker compose exec mediawiki composer update
 	rm -f LocalSettings.php
-	@echo "Running update command..."
 	@until docker compose exec -ti mediawiki sh -c '$(UPDATE_CMD)'; do \
 		echo "Update command failed. Retrying..."; \
 		sleep 5; \
-	done
+		done
 	echo "$(SETTINGS)" >> LocalSettings.php
 
