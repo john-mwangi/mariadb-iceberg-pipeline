@@ -1,4 +1,5 @@
 # This Makefile rebuilds MediaWiki
+
 all: docker_services update_mediawiki
 
 UPDATE_CMD = php maintenance/run.php install --dbname=my_database --dbuser=my_user --dbpass=my_password --dbserver=mariadb-main \
