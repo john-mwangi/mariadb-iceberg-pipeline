@@ -45,10 +45,9 @@ docker_services: docker-compose.yml
 update_mediawiki: .env
 	docker compose exec mediawiki composer update
 	rm -f LocalSettings.php
-	@echo "Running update command..."
 	@until docker compose exec -ti mediawiki sh -c '$(UPDATE_CMD)'; do \
 		echo "Update command failed. Retrying..."; \
 		sleep 5; \
-	done
+		done
 	echo "$(SETTINGS)" >> LocalSettings.php
 
