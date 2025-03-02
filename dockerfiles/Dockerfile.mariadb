@@ -22,7 +22,7 @@ RUN chown 1001:root /opt/flink/ && \
     chmod 775 /opt/flink/
 
 # Scripts placed here will automatically run when the container starts
-# COPY scripts/create_tables.sql /docker-entrypoint-initdb.d/
+COPY scripts/create_tables.sql /docker-entrypoint-initdb.d/
 
 # Default container user
 USER 1001
