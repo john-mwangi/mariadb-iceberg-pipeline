@@ -27,7 +27,7 @@ Refer to `./docs`
 ### 3. Monitor streaming jobs
 - Flink UI: http://localhost:8081/
 - Kafka UI: http://localhost:8082/ (u: admin, p:admin)
-- MediaWiki UI : http://localhost:8083/wiki/Main_Page
+- MediaWiki UI: http://localhost:8083/wiki/Main_Page
 
 ## Implementation process
 Below is the implementation procedure that will be followed, to be updated as necessary:
@@ -73,11 +73,15 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Query Iceberg catalog table using Spark SQL
     - [x] Query Paimon catalog table using Spark SQL
 - [ ] CDC experimentation
-    - [ ] Connect to Analytics/Wiki Replicas<sup>[2]</sup>
+    - [ ] Connect to Analytics/Wiki Replicas <sup>[2]</sup>
     - [x] Install MediaWiki locally
     - [x] Connect to MediWiki db
     - [x] Replace mariadb:11 image with bitnami/mariadb:11.4
+    - [x] Add Makefile to rebuilt MediaWiki
     - [ ] Update docker-compose.override.yml
+        - [x] Add MediakWiki
+	- [ ] Add Flink services
+	- [ ] Add Debezium, Kafka, and related services
     - [ ] Simulate pipeline in prod-like environment
 
 > [!NOTE]
