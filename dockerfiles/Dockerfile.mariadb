@@ -9,20 +9,20 @@ RUN apt-get update && \
     mkdir -p /opt/flink/lib && \
     mkdir -p /var/lib/apt/lists/partial && \
     set -a && . /opt/flink/versions.env && set +a && \
-    curl -Lo /opt/flink/lib/flink-sql-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-mysql-cdc/${FLINK_CDC_VERSION}/flink-sql-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar && \
-    curl -Lo /opt/flink/lib/flink-shaded-hadoop-2-uber-${HADOOP_VERSION}-${UBER_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-shaded-hadoop-2-uber/${HADOOP_VERSION}-${UBER_VERSION}/flink-shaded-hadoop-2-uber-${HADOOP_VERSION}-${UBER_VERSION}.jar && \
-    curl -Lo /opt/flink/lib/iceberg-flink-runtime-${FLINK_VERSION}-${ICEBERG_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-flink-runtime-${FLINK_VERSION}/${ICEBERG_VERSION}/iceberg-flink-runtime-${FLINK_VERSION}-${ICEBERG_VERSION}.jar && \
-    curl -Lo /opt/flink/lib/flink-sql-connector-kafka-${FLINK_CDC_VERSION}-${FLINK_VERSION}.jar https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/${FLINK_CDC_VERSION}-${FLINK_VERSION}/flink-sql-connector-kafka-${FLINK_CDC_VERSION}-${FLINK_VERSION}.jar && \
-    curl -Lo /opt/flink/lib/paimon-flink-${FLINK_VERSION}-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-flink-${FLINK_VERSION}/${PAIMON_VERSION}/paimon-flink-${FLINK_VERSION}-${PAIMON_VERSION}.jar && \
-    curl -Lo /opt/flink/lib/paimon-flink-action-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-flink-action/${PAIMON_VERSION}/paimon-flink-action-${PAIMON_VERSION}.jar && \
-    curl -Lo /opt/flink/lib/paimon-flink-cdc-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-flink-cdc/${PAIMON_VERSION}/paimon-flink-cdc-${PAIMON_VERSION}.jar && \
-    curl -Lo /opt/flink/lib/flink-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-mysql-cdc/${FLINK_CDC_VERSION}/flink-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar
+    curl -fLo /opt/flink/lib/flink-sql-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-mysql-cdc/${FLINK_CDC_VERSION}/flink-sql-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar && \
+    curl -fLo /opt/flink/lib/flink-shaded-hadoop-2-uber-${HADOOP_VERSION}-${UBER_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-shaded-hadoop-2-uber/${HADOOP_VERSION}-${UBER_VERSION}/flink-shaded-hadoop-2-uber-${HADOOP_VERSION}-${UBER_VERSION}.jar && \
+    curl -fLo /opt/flink/lib/iceberg-flink-runtime-${FLINK_VERSION}-${ICEBERG_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-flink-runtime-${FLINK_VERSION}/${ICEBERG_VERSION}/iceberg-flink-runtime-${FLINK_VERSION}-${ICEBERG_VERSION}.jar && \
+    curl -fLo /opt/flink/lib/flink-sql-connector-kafka-${FLINK_CDC_VERSION}-${FLINK_VERSION}.jar https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/${FLINK_CDC_VERSION}-${FLINK_VERSION}/flink-sql-connector-kafka-${FLINK_CDC_VERSION}-${FLINK_VERSION}.jar && \
+    curl -fLo /opt/flink/lib/paimon-flink-${FLINK_VERSION}-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-flink-${FLINK_VERSION}/${PAIMON_VERSION}/paimon-flink-${FLINK_VERSION}-${PAIMON_VERSION}.jar && \
+    curl -fLo /opt/flink/lib/paimon-flink-action-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-flink-action/${PAIMON_VERSION}/paimon-flink-action-${PAIMON_VERSION}.jar && \
+    curl -fLo /opt/flink/lib/paimon-flink-cdc-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-flink-cdc/${PAIMON_VERSION}/paimon-flink-cdc-${PAIMON_VERSION}.jar && \
+    curl -fLo /opt/flink/lib/flink-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-mysql-cdc/${FLINK_CDC_VERSION}/flink-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar
 
 RUN chown 1001:root /opt/flink/ && \
     chmod 775 /opt/flink/
 
 # Scripts placed here will automatically run when the container starts
-COPY scripts/create_tables.sql /docker-entrypoint-initdb.d/
+# COPY scripts/create_tables.sql /docker-entrypoint-initdb.d/
 
 # Default container user
 USER 1001
