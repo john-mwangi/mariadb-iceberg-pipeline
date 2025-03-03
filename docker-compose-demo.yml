@@ -88,6 +88,7 @@ services:
          - iceberg_net
       volumes:
          - ./dockerfiles/config/my.cnf:/opt/bitnami/mariadb/conf/my.cnf
+         - ./dockerfiles/scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
    kafka:
       image: confluentinc/cp-kafka:7.7.1
       container_name: kafka

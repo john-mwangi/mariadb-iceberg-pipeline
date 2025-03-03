@@ -95,7 +95,7 @@ services:
     volumes:
       - ./dockerfiles/config/application.properties.mediawiki:/debezium/config/application.properties
     depends_on:
-      - mariadb-replica
+      - mariadb-main
   kafka:
     image: confluentinc/cp-kafka:7.7.1
     container_name: kafka
