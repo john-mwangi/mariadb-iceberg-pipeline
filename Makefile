@@ -1,4 +1,4 @@
-# This Makefile rebuilds MediaWiki
+# This Makefile performs a clean rebuild of MediaWiki
 
 all: docker_services update_mediawiki
 
