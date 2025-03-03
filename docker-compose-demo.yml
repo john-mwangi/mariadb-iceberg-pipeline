@@ -117,7 +117,7 @@ services:
       networks:
          - iceberg_net
       volumes:
-         - ./dockerfiles/config/application.properties:/debezium/config/application.properties
+         - ./dockerfiles/config/application.properties.demo:/debezium/config/application.properties
    kafka-ui:
       container_name: kafka-ui
       image: provectuslabs/kafka-ui:v0.7.2
