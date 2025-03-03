@@ -79,9 +79,6 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Replace mariadb:11 image with bitnami/mariadb:11.4
     - [x] Add Makefile to rebuilt MediaWiki
     - [x] Update docker-compose.override.yml
-        - [x] Add MediakWiki
-      	- [x] Add Flink services
-	- [x] Add Debezium, Kafka, and related services
     - [x] Create kafka_database_sync job
     - [ ] Experimentation
 
