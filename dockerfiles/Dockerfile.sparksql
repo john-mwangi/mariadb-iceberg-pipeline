@@ -7,7 +7,7 @@ USER spark
 COPY versions.env /opt/flink/
 
 RUN set -a && . /opt/flink/versions.env && set +a && \
-    curl -Lo /opt/spark/jars/iceberg-spark-runtime-${SPARK_VERSION}_${SCALA_VERSION}-${ICEBERG_VERSION}.jar https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-spark-runtime-${SPARK_VERSION}_${SCALA_VERSION}/${ICEBERG_VERSION}/iceberg-spark-runtime-${SPARK_VERSION}_${SCALA_VERSION}-${ICEBERG_VERSION}.jar && \
-    curl -Lo /opt/spark/jars/paimon-spark-${SPARK_VERSION}-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-spark-${SPARK_VERSION}/${PAIMON_VERSION}/paimon-spark-${SPARK_VERSION}-${PAIMON_VERSION}.jar
+    curl -fLo /opt/spark/jars/iceberg-spark-runtime-${SPARK_VERSION}_${SCALA_VERSION}-${ICEBERG_VERSION}.jar https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-spark-runtime-${SPARK_VERSION}_${SCALA_VERSION}/${ICEBERG_VERSION}/iceberg-spark-runtime-${SPARK_VERSION}_${SCALA_VERSION}-${ICEBERG_VERSION}.jar && \
+    curl -fLo /opt/spark/jars/paimon-spark-${SPARK_VERSION}-${PAIMON_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/paimon/paimon-spark-${SPARK_VERSION}/${PAIMON_VERSION}/paimon-spark-${SPARK_VERSION}-${PAIMON_VERSION}.jar
 
 CMD ["/opt/spark/bin/spark-sql"]

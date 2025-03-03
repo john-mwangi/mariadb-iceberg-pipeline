@@ -78,11 +78,12 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Connect to MediWiki db
     - [x] Replace mariadb:11 image with bitnami/mariadb:11.4
     - [x] Add Makefile to rebuilt MediaWiki
-    - [ ] Update docker-compose.override.yml
+    - [x] Update docker-compose.override.yml
         - [x] Add MediakWiki
-	- [ ] Add Flink services
-	- [ ] Add Debezium, Kafka, and related services
-    - [ ] Simulate pipeline in prod-like environment
+	- [x] Add Flink services
+	- [x] Add Debezium, Kafka, and related services
+    - [x] Create kafka_database_sync job
+    - [ ] Experimentation
 
 > [!NOTE]
 > 1. Current Flink CDC version doesn't capture the schema. This is planned for 
