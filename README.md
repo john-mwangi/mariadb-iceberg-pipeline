@@ -89,6 +89,7 @@ Below is the implementation procedure that will be followed, to be updated as ne
 - [ ] CDC experimentation
     - [ ] Add several databases
     - [ ] Develop script to create jobs for all databases
+    - [ ] Testing
     - [ ] Update documentation
     - [ ] Document findings & recommendations
 
