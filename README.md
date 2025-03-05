@@ -95,7 +95,7 @@ Below is the implementation procedure that will be followed, to be updated as ne
 
 > [!NOTE]
 > 1. Current Flink CDC version doesn't capture the schema. This is planned for 
-[Flink CDC v3.3](https://issues.apache.org/jira/browse/FLINK-36611)
+[Flink CDC v3.3](https://issues.apache.org/jira/browse/FLINK-36611). Because of this gap, Debezium was used instead.
 > 2. Analytics Replicas contain unredacted personal user data. Wiki Replicas do not have binlog settings enabled
 
 ## Relevant links
