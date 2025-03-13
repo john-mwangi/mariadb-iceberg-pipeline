@@ -10,6 +10,12 @@ Determine the feasibility of:
 1. **Flink CDC:** Mariadb -> Flink CDC -> Kafka -> Iceberg
 1. **Debezium CDC:** Mariadb -> Debezium -> Kafka -> Iceberg
 
+## Features
+1. Realtime streaming between MariaDB and Apache Iceberg - using CDC events from binlogs with no additional load/queries to the source database
+1. Auto-creation of destination tables with the correct schemas - schemas are inferred from the broker messages
+1. Schema evolution support - a change in the source table schema will automatically update the destination table schema
+1. Spark SQL support - in addition to the out-of-the-box Flink SQL querying
+
 ## Set up
 ### 1. Build the services
 Running this docker-compose file will download the necessary connectors and place them
@@ -72,22 +78,24 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Add Spark SQL
     - [x] Query Iceberg catalog table using Spark SQL
     - [x] Query Paimon catalog table using Spark SQL
-- [ ] CDC experimentation
+- [x] Set up MediaWiki
     - [ ] Connect to Analytics/Wiki Replicas <sup>[2]</sup>
     - [x] Install MediaWiki locally
     - [x] Connect to MediWiki db
     - [x] Replace mariadb:11 image with bitnami/mariadb:11.4
-    - [x] Add Makefile to rebuilt MediaWiki
+    - [x] Add Makefile to simplify MediaWiki rebuild
     - [x] Update docker-compose.override.yml
-        - [x] Add MediakWiki
-      	- [x] Add Flink services
-	- [x] Add Debezium, Kafka, and related services
     - [x] Create kafka_database_sync job
-    - [ ] Experimentation
+- [ ] CDC experimentation
+    - [ ] Add several databases
+    - [ ] Develop script to create jobs for all databases
+    - [ ] Testing
+    - [ ] Update documentation
+    - [ ] Document findings & recommendations
 
 > [!NOTE]
 > 1. Current Flink CDC version doesn't capture the schema. This is planned for 
-[Flink CDC v3.3](https://issues.apache.org/jira/browse/FLINK-36611)
+[Flink CDC v3.3](https://issues.apache.org/jira/browse/FLINK-36611). Because of this gap, Debezium was used instead.
 > 2. Analytics Replicas contain unredacted personal user data. Wiki Replicas do not have binlog settings enabled
 
 ## Relevant links
