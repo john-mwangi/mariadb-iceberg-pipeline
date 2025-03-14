@@ -87,7 +87,7 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Update docker-compose.override.yml
     - [x] Create kafka_database_sync job
 - [ ] CDC experimentation
-    - [ ] Add several databases
+    - [x] Add several databases
     - [ ] Develop script to create jobs for all databases
     - [ ] Testing
     - [ ] Update documentation
