@@ -1,6 +1,6 @@
 # This Makefile performs a clean rebuild of MediaWiki
 
-all: docker_services update_mediawiki
+all: docker_services update_mediawiki create_databases
 
 UPDATE_CMD = php maintenance/run.php install --dbname=my_database --dbuser=my_user --dbpass=my_password --dbserver=mariadb-main \
 --server="$${MW_SERVER}" --scriptpath="$${MW_SCRIPT_PATH}" --lang en \
@@ -51,3 +51,5 @@ update_mediawiki: .env
 		done
 	echo "$(SETTINGS)" >> LocalSettings.php
 
+create_databases:
+	docker exec -ti mariadb-main miniconda3/bin/python scripts/create_databases.py
