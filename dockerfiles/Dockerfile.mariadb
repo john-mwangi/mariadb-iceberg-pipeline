@@ -1,13 +1,15 @@
 FROM bitnami/mariadb:11.4
 
 COPY versions.env /opt/flink/
+COPY scripts /scripts/
 
 USER root
 
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y curl wget vim && \
     mkdir -p /opt/flink/lib && \
     mkdir -p /var/lib/apt/lists/partial && \
+    export $(cat /scripts/.env | xargs) && \
     set -a && . /opt/flink/versions.env && set +a && \
     curl -fLo /opt/flink/lib/flink-sql-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-mysql-cdc/${FLINK_CDC_VERSION}/flink-sql-connector-mysql-cdc-${FLINK_CDC_VERSION}.jar && \
     curl -fLo /opt/flink/lib/flink-shaded-hadoop-2-uber-${HADOOP_VERSION}-${UBER_VERSION}.jar https://repo.maven.apache.org/maven2/org/apache/flink/flink-shaded-hadoop-2-uber/${HADOOP_VERSION}-${UBER_VERSION}/flink-shaded-hadoop-2-uber-${HADOOP_VERSION}-${UBER_VERSION}.jar && \
@@ -22,7 +24,13 @@ RUN chown 1001:root /opt/flink/ && \
     chmod 775 /opt/flink/
 
 # Scripts placed here will automatically run when the container starts
-# COPY scripts/create_tables.sql /docker-entrypoint-initdb.d/
+# COPY scripts/grant_users.sql /docker-entrypoint-initdb.d/
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py311_25.1.1-2-Linux-x86_64.sh && \
+    bash Miniconda3-py311_25.1.1-2-Linux-x86_64.sh -b && \
+    rm Miniconda3-py311_25.1.1-2-Linux-x86_64.sh && \
+    ~/miniconda3/bin/conda init bash && \
+    ~/miniconda3/bin/pip install -r /scripts/requirements.txt
 
 # Default container user
 USER 1001

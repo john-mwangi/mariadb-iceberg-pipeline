@@ -3,7 +3,7 @@
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import MetaData, Table, create_engine, insert, inspect, text
+from sqlalchemy import MetaData, Table, create_engine, insert, inspect, text, select
 from sqlalchemy.exc import ProgrammingError
 
 load_dotenv()
@@ -14,7 +14,7 @@ host = os.environ.get("MARIADB_HOST")
 port = os.environ.get("MARIADB_PORT")
 db = os.environ.get("MARIADB_DATABASE")
 dialect = os.environ.get("DATABASE_DIALECT")
-
+connector = os.environ.get("DATABASE_CONNECTOR")
 
 def create_databases(n=2) -> list[str]:
     """Creates a copy of a database.
@@ -28,7 +28,7 @@ def create_databases(n=2) -> list[str]:
     list of databases created
     """
 
-    engine = create_engine(f"{dialect}://{user}:{password}@{host}:{port}")
+    engine = create_engine(f"{dialect}+{connector}://{user}:{password}@{host}:{port}")
 
     databases = []
 
@@ -60,14 +60,14 @@ def create_tables(dbs: list[str]) -> None:
     * dbs: the databases to copy data to
     """
 
-    engine = create_engine(f"{dialect}://{user}:{password}@{host}:{port}/{db}")
+    engine = create_engine(f"{dialect}+{connector}://{user}:{password}@{host}:{port}/{db}")
     db_inspector = inspect(engine)
     tables = db_inspector.get_table_names()
     print(f"tables in {db}: {tables}")
 
     for d in dbs:
 
-        eng = create_engine(f"{dialect}://{user}:{password}@{host}:{port}/{d}")
+        eng = create_engine(f"{dialect}+{connector}://{user}:{password}@{host}:{port}/{d}")
 
         # create tables
         for tbl in tables:
@@ -81,14 +81,17 @@ def create_tables(dbs: list[str]) -> None:
 
         # populate tables
         for tbl in tables:
-            query = text(f'SELECT * FROM "{tbl}";')
+            source = Table(tbl, MetaData(), autoload_with=engine)
+            query = select(source)
+            
             with engine.connect() as conn:
                 data = conn.execute(query).fetchall()
 
-            table = Table(tbl, MetaData(), autoload_with=eng)
+            destination = Table(tbl, MetaData(), autoload_with=eng)
 
             with eng.begin() as conn:
-                conn.execute(insert(table), [r._mapping for r in data])
+                if data:
+                    conn.execute(insert(destination), [r._mapping for r in data])
 
             print(f"successfully copied data to '{tbl}' in '{d}'\n")
 
