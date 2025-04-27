@@ -37,9 +37,12 @@ performed so that a CDC message containing the new schema can be propagated to K
 - [x] Adding tables - The `kafka_sync_database` job has to be re-run to create the new tables
 
 ## Limitations
-- [RESOLVED] Paimon Iceberg Compatibility Mode feature seems to have a bug: you can describe 
+1. [RESOLVED] Paimon Iceberg Compatibility Mode feature seems to have a bug: you can describe 
 a table but running a query on the same table returns a `Table does not exist` 
 error. Though part of the [v0.9 release](https://paimon.apache.org/docs/0.9/maintenance/configurations/), 
 it has not been documented and is undergoing significant revision for the 
 [v1.0 release](https://paimon.apache.org/docs/master/maintenance/configurations/). 
 This includes replacing `metadata.iceberg-compatible (bool)` with `metadata.iceberg.storage (enum)`
+
+> [!NOTE]
+> Issue [1] has been resolved with the upgrade of the pipeline to Paimon v1.0
