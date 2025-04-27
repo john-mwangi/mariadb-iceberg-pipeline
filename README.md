@@ -19,6 +19,7 @@ Determine the feasibility of:
 ## Set up
 ### 1. Build the services
 **Demo pipeline**
+
 For the demo pipeline, i.e., without Wikipedia's MediaWiki, running this docker-compose file will download the necessary connectors and place them
 in the correct directories.
 ```bash
@@ -26,6 +27,7 @@ docker compose -f docker-compose-demo.yml up --build --remove-orphans -d
 ```
 
 **With MediaWiki**
+
 First, [clone the MediaWiki repo](https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/refs/heads/master/DEVELOPERS.md#quickstart) and prepare the `.env` file.
 
 Next, execute the Makefile. It simplifies the (re)building of MediaWiki.
