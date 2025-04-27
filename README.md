@@ -18,17 +18,29 @@ Determine the feasibility of:
 
 ## Set up
 ### 1. Build the services
-Running this docker-compose file will download the necessary connectors and place them
+**Demo pipeline**
+For the demo pipeline, i.e., without Wikipedia's MediaWiki, running this docker-compose file will download the necessary connectors and place them
 in the correct directories.
-```
+```bash
 docker compose -f docker-compose-demo.yml up --build --remove-orphans -d
+```
+
+**With MediaWiki**
+First, [clone the MediaWiki repo](https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/refs/heads/master/DEVELOPERS.md#quickstart) and prepare the `.env` file.
+
+Next, execute the Makefile. It simplifies the (re)building of MediaWiki.
+```bash
+make
 ```
 
 >[!TIP]
 > Use `dockerfiles/versions.env` to upgrade components of the pipeline.
 
 ### 2. Create a streaming job
-Refer to `./docs`
+Refer to `./docs` to start a streaming job. There are several ways of starting streaming jobs:
+- Flink SQL (simplest): This creates a streaming job using Flink SQL (`./docs/flink-sql.md`)
+- Apache Kafka: This creates a streaming job that uses Kafka as the message broker and Debezium to generate CDC events (`./docs/flink-kafka.md`)
+- Apache Paimon (recommended): This automates the creation of the destination tables in Iceberg with schemas that match source tables and keeps them updated via automated schema evolution (`./docs/schema-evolution.md`)
 
 ### 3. Monitor streaming jobs
 - Flink UI: http://localhost:8081/
@@ -87,7 +99,7 @@ Below is the implementation procedure that will be followed, to be updated as ne
     - [x] Update docker-compose.override.yml
     - [x] Create kafka_database_sync job
 - [ ] CDC experimentation
-    - [x] Add several databases
+    - [x] Develop script that adds several databases
     - [ ] Develop script to create jobs for all databases
     - [ ] Testing
     - [ ] Update documentation
