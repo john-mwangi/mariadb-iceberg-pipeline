@@ -23,7 +23,7 @@ Determine the feasibility of:
 For the demo pipeline, i.e., without Wikipedia's MediaWiki, running this docker-compose file will download the necessary connectors and place them
 in the correct directories.
 ```bash
-docker compose -f docker-compose-demo.yml up --build --remove-orphans -d
+docker compose -f docker-compose-demo.yml up --build -d
 ```
 
 **With MediaWiki**
@@ -45,7 +45,7 @@ Refer to `./docs` to start a streaming job. There are several ways of starting s
 - Apache Paimon (recommended): This automates the creation of the destination tables in Iceberg with schemas that match source tables and keeps them updated via automated schema evolution (`./docs/schema-evolution.md`)
 
 ### 3. Monitor streaming jobs
-- Flink UI: http://localhost:8081/
+- Flink Jobmanager UI: http://localhost:8081/
 - Kafka UI: http://localhost:8082/ (u: admin, p:admin)
 - MediaWiki UI: http://localhost:8083/wiki/Main_Page
 

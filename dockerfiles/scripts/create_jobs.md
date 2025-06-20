@@ -119,6 +119,9 @@ INSERT INTO all_users_sink_kafka SELECT * FROM user_source_kafka;
 
 Monitor the table in the data lake.
 ```sql
+-- Results will show in a non-paginated view
+-- SET 'sql-client.execution.result-mode' = 'tableau';
+
 SELECT * FROM all_users_sink_kafka;
 ```
 
