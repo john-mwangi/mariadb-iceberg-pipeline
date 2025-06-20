@@ -43,7 +43,7 @@ services:
          context: dockerfiles
          dockerfile: Dockerfile.main
       ports:
-         - "8081:8081"
+         - 8081:8081
       command: jobmanager
       environment:
          - |
@@ -125,19 +125,19 @@ services:
       volumes:
          - ./dockerfiles/config/kafka-ui.yaml:/etc/kafkaui/dynamic_config.yaml
       environment:
-         DYNAMIC_CONFIG_ENABLED: 'true'
+         DYNAMIC_CONFIG_ENABLED: true
       depends_on:
          - kafka
       networks:
          - iceberg_net
       ports:
-         - '8082:8080'
+         - 8082:8080
 volumes:
    shared-tmpfs:
       driver: local
       driver_opts:
-         type: "tmpfs"
-         device: "tmpfs"
+         type: tmpfs
+         device: tmpfs
 networks:
    iceberg_net:
       driver: bridge
