@@ -7,7 +7,9 @@ from kafka import KafkaProducer
 import json
 
 PREDICTIONS_TOPIC = "prediction_details"
-producer = KafkaProducer(bootstrap_servers="localhost:29092")
+KAFKA_SERVER = "localhost:29092"
+
+producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
 for i in range(10):
     prediction_id = uuid4().hex
