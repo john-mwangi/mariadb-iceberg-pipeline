@@ -9,11 +9,15 @@ Determine the feasibility of:
 1. **Flink SQL:** Mariadb -> Flink SQL -> Iceberg
 1. **Flink CDC:** Mariadb -> Flink CDC -> Kafka -> Iceberg
 1. **Debezium CDC:** Mariadb -> Debezium -> Kafka -> Iceberg
+1. **Paimon CDC:** MariaDB -> Debezium -> Kafka -> Paimon -> Iceberg
+
+## Architecture
+<todo>
 
 ## Features
-1. Realtime streaming between MariaDB and Apache Iceberg - using CDC events from binlogs with no additional load/queries to the source database
+1. Realtime streaming between MariaDB and Apache Iceberg - using CDC events from binlogs without additional load/queries to the source database
 1. Auto-creation of destination tables with the correct schemas - schemas are inferred from the broker messages
-1. Schema evolution support - a change in the source table schema will automatically update the destination table schema
+1. Schema evolution support (Paimon option) - a change in the source table schema will automatically update the destination table schema
 1. Spark SQL support - in addition to the out-of-the-box Flink SQL querying
 
 ## Set up

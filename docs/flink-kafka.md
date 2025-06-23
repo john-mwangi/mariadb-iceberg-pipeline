@@ -3,9 +3,9 @@ This implements the a streaming pipeline from Maria DB to Iceberg with Kafka as 
 It uses Flink SQL instead of Kafka Connect to connect Kafka to Iceberg.
 
 # Implementation
-1. Create Docker services: `docker compose -f docker-compose.yml up --build --remove-orphans -d`
-1. Access Kafka UI to monitor Kafka messages: http://localhost:8082 (u: admin, p:admin)
-1. Access Flink dashboard to monitor streaming jobs: http://localhost:8081
+1. Create Docker services
+1. Access Kafka UI to monitor Kafka message
+1. Access Flink Jobmanager dashboard to monitor streaming jobs
 1. Access Flink SQL terminal: `docker compose -f docker-compose-demo.yml run --remove-orphans sql-client`
 
 # Operation
