@@ -125,6 +125,61 @@ Monitor the table in the data lake.
 SELECT * FROM all_users_sink_kafka;
 ```
 
+**If using the `machine_learning` database**
+Create sources from Kafka.
+```sql
+CREATE TABLE ml_source_kafka (
+    database_name STRING METADATA FROM 'value.source.database' VIRTUAL,
+    table_name STRING METADATA FROM 'value.source.table' VIRTUAL,
+    topic STRING METADATA FROM 'topic' VIRTUAL,
+    prediction_id STRING NOT NULL,
+    customer_id INTEGER,
+    credit_score INTEGER,
+    email STRING,
+    PRIMARY KEY (prediction_id) NOT ENFORCED
+  ) WITH (
+    'connector' ='kafka',
+    'topic' = 'users.machine_learning.predictions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'scan.startup.mode' = 'earliest-offset',
+    'format' = 'debezium-json',
+    'debezium-json.schema-include' = 'true'
+  );
+```
+
+Create a Kafka sink in Iceberg.
+```sql
+CREATE TABLE ml_sink_kafka (
+  database_name STRING,
+  table_name    STRING,
+  topic         STRING,
+  prediction_id STRING,
+  customer_id   INTEGER,
+  credit_score  INTEGER,
+  email         STRING,
+  PRIMARY KEY (database_name, table_name, prediction_id) NOT ENFORCED
+) WITH (
+    'connector'='iceberg',
+    'catalog-name'='iceberg_catalog',
+    'catalog-type'='hadoop',
+    'warehouse'='file:///tmp/iceberg/warehouse',
+    'format-version'='2'
+  );
+```
+
+Start a streaming job.
+```sql
+INSERT INTO ml_sink_kafka SELECT * FROM ml_source_kafka;
+```
+
+Monitor the table in the data lake.
+```sql
+-- Results will show in a non-paginated view
+SET 'sql-client.execution.result-mode' = 'tableau';
+
+SELECT * FROM ml_sink_kafka;
+```
+
 ## PAIMON KAFKA TABLE SYNC ACTION
 Log into the Flink SQL terminal.
 
