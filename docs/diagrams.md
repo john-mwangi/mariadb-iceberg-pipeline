@@ -57,8 +57,8 @@ sequenceDiagram
     participant Alerts_App as Alerts App
     participant Advisor as Customer Advisor
 
-    ML_Service->>Kafka: Writes prediction_details topic
-    Kafka-->>Validator_App: Reads prediction_details topic
+    ML_Service->>Kafka: Writes predictions topic
+    Kafka-->>Validator_App: Reads predictions topic
     Validator_App->>Validator_App: Validates credit_score
     Validator_App->>Kafka: Writes qualified_leads topic (if validation passes)
     Kafka-->>Alerts_App: Reads qualified_leads topic
