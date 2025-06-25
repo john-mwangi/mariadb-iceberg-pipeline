@@ -58,7 +58,7 @@ sequenceDiagram
 
     ML_Service->>Kafka: Writes prediction_details topic
     Kafka-->>Validator_App: Reads prediction_details topic
-    Validator_App->>Validator_App: Validates prediction
+    Validator_App->>Validator_App: Validates credit_sccore
     Validator_App->>Kafka: Writes qualified_leads topic (if validation passes)
     Kafka-->>Alerts_App: Reads qualified_leads topic
     Alerts_App->>Customer: Sends success alerts
