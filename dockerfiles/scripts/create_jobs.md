@@ -128,7 +128,7 @@ SELECT * FROM all_users_sink_kafka;
 **If using the `machine_learning` database**
 Create sources from Kafka.
 ```sql
-CREATE TABLE ml_source_kafka (
+CREATE TABLE ml_source (
     database_name STRING METADATA FROM 'value.source.database' VIRTUAL,
     table_name STRING METADATA FROM 'value.source.table' VIRTUAL,
     topic STRING METADATA FROM 'topic' VIRTUAL,
@@ -149,7 +149,7 @@ CREATE TABLE ml_source_kafka (
 
 Create a Kafka sink in Iceberg.
 ```sql
-CREATE TABLE ml_sink_kafka (
+CREATE TABLE ml_sink (
   database_name STRING,
   table_name    STRING,
   topic         STRING,
@@ -169,15 +169,14 @@ CREATE TABLE ml_sink_kafka (
 
 Start a streaming job.
 ```sql
-INSERT INTO ml_sink_kafka SELECT * FROM ml_source_kafka;
+INSERT INTO ml_sink SELECT * FROM ml_source;
 ```
 
 Monitor the table in the data lake.
 ```sql
 -- Results will show in a non-paginated view
 SET 'sql-client.execution.result-mode' = 'tableau';
-
-SELECT * FROM ml_sink_kafka;
+SELECT * FROM ml_sink;
 ```
 
 ## PAIMON KAFKA TABLE SYNC ACTION
