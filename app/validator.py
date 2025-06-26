@@ -31,6 +31,7 @@ def read_from_simple_topic():
                 print(f"Sent Qualified Lead: {prediction_id=}, {credit_score=} to topic: {QUALIFIED_LEADS_TOPIC}")
 
 def read_from_debezium_topic():
+    """Consumes broker messages that are in Debezium format"""
     pass
 
 if __name__ == "__main__":
