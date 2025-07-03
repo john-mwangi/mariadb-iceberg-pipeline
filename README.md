@@ -39,6 +39,15 @@ Next, execute the Makefile. It simplifies the (re)building of MediaWiki.
 make
 ```
 
+**With MediaWiki**
+
+First, [clone the MediaWiki repo](https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/refs/heads/master/DEVELOPERS.md#quickstart) and prepare the `.env` file.
+
+Next, execute the Makefile. It simplifies the (re)building of MediaWiki.
+```bash
+make
+```
+
 >[!TIP]
 > Use `dockerfiles/versions.env` to upgrade components of the pipeline.
 
