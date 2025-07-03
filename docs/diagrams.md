@@ -43,24 +43,3 @@ graph TD
     F --"User Queries" --> H
     E --"Job Monitoring" --> G
 ```
-
-# Feature Design
-
-Below is a sequence diagram for the feature that is going to be implemented.
-
-```mermaid
-%% Feature Design
-sequenceDiagram
-    participant ML_Service as ML Model
-    participant Kafka as Kafka
-    participant Validator_App as Validator App
-    participant Alerts_App as Alerts App
-    participant Advisor as Customer Advisor
-
-    ML_Service->>Kafka: Writes predictions topic
-    Kafka-->>Validator_App: Reads predictions topic
-    Validator_App->>Validator_App: Validates credit_score
-    Validator_App->>Kafka: Writes qualified_leads topic (if validation passes)
-    Kafka-->>Alerts_App: Reads qualified_leads topic
-    Alerts_App->>Advisor: Sends success alerts
-```
