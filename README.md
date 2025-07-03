@@ -52,6 +52,7 @@ Refer to `./docs` to start a streaming job. There are several ways of starting s
 - Flink Jobmanager UI: http://localhost:8081/
 - Kafka UI: http://localhost:8082/ (u: admin, p:admin)
 - MediaWiki UI: http://localhost:8083/wiki/Main_Page
+- Spark Web UI: http://localhost:8084
 
 ## Implementation process
 Below is the implementation procedure that will be followed, to be updated as necessary:
