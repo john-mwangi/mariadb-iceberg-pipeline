@@ -54,3 +54,13 @@ CREATE TABLE user_2 (
   email VARCHAR(255)
 );
 INSERT INTO user_2 VALUES (220,"user_220","Shanghai","123567891234","user_220@foo.com");
+
+CREATE DATABASE machine_learning;
+USE machine_learning;
+CREATE TABLE predictions (
+  prediction_id VARCHAR(255) NOT NULL PRIMARY KEY,
+  customer_id INTEGER,
+  credit_score INTEGER,
+  email VARCHAR(255)
+);
+INSERT INTO predictions VALUES ('d3964613c7c542f2b997a5e76248df3b', 999999, 123, 'example@email.com');
