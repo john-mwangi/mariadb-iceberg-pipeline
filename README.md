@@ -9,11 +9,15 @@ Determine the feasibility of:
 1. **Flink SQL:** Mariadb -> Flink SQL -> Iceberg
 1. **Flink CDC:** Mariadb -> Flink CDC -> Kafka -> Iceberg
 1. **Debezium CDC:** Mariadb -> Debezium -> Kafka -> Iceberg
+1. **Paimon CDC:** MariaDB -> Debezium -> Kafka -> Paimon -> Iceberg
+
+## Architecture
+<todo>
 
 ## Features
-1. Realtime streaming between MariaDB and Apache Iceberg - using CDC events from binlogs with no additional load/queries to the source database
+1. Realtime streaming between MariaDB and Apache Iceberg - using CDC events from binlogs without additional load/queries to the source database
 1. Auto-creation of destination tables with the correct schemas - schemas are inferred from the broker messages
-1. Schema evolution support - a change in the source table schema will automatically update the destination table schema
+1. Schema evolution support (Paimon option) - a change in the source table schema will automatically update the destination table schema
 1. Spark SQL support - in addition to the out-of-the-box Flink SQL querying
 
 ## Set up
@@ -23,7 +27,16 @@ Determine the feasibility of:
 For the demo pipeline, i.e., without Wikipedia's MediaWiki, running this docker-compose file will download the necessary connectors and place them
 in the correct directories.
 ```bash
-docker compose -f docker-compose-demo.yml up --build --remove-orphans -d
+docker compose -f docker-compose-demo.yml up --build -d
+```
+
+**With MediaWiki**
+
+First, [clone the MediaWiki repo](https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/refs/heads/master/DEVELOPERS.md#quickstart) and prepare the `.env` file.
+
+Next, execute the Makefile. It simplifies the (re)building of MediaWiki.
+```bash
+make
 ```
 
 **With MediaWiki**
@@ -45,9 +58,10 @@ Refer to `./docs` to start a streaming job. There are several ways of starting s
 - Apache Paimon (recommended): This automates the creation of the destination tables in Iceberg with schemas that match source tables and keeps them updated via automated schema evolution (`./docs/schema-evolution.md`)
 
 ### 3. Monitor streaming jobs
-- Flink UI: http://localhost:8081/
+- Flink Jobmanager UI: http://localhost:8081/
 - Kafka UI: http://localhost:8082/ (u: admin, p:admin)
 - MediaWiki UI: http://localhost:8083/wiki/Main_Page
+- Spark Web UI: http://localhost:8084
 
 ## Implementation process
 Below is the implementation procedure that will be followed, to be updated as necessary:
